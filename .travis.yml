@@ -7,7 +7,7 @@ env:
     - DOCKER_BASE_TAG=3.7
     - DOCKER_BASE_IMAGE=zeroc/ci-base-ubuntu-16.04:${DOCKER_BASE_TAG}
     - DOCKER_BUILD_IMAGE=zeroc/ci-build-ubuntu-16.04:${TRAVIS_JOB_NUMBER}
-    - MAKEFLAGS=-j3 V=1 OPTIMIZE=no USER_NAMESPACES=no CONFIGS="shared"
+    - MAKEFLAGS='-j3 V=1 OPTIMIZE=no USER_NAMESPACES=no CONFIGS="shared"'
 
 jobs:
   include:
