@@ -16,7 +16,7 @@ addons:
     - libdbus-glib-1-dev
     - libbluetooth-dev
     - oracle-java8-installer
-    - dotnet-sdk-2.0
+    - dotnet-sdk-2.0.3
 
 env:
   global:
@@ -30,7 +30,6 @@ env:
     - JAVA_HOME=/usr/lib/jvm/java-8-oracle
     - USE_NAMESPACES=no
     - OPTIMIZE=no
-    - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 
   matrix:
     - WORK_DIR=${TRAVIS_BUILD_DIR}/cpp SKIP="IceBT" CONFIGS="cpp11-shared"
