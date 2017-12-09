@@ -4,17 +4,32 @@ dist: trusty
 
 env:
   global:
-    - DOCKER_BASE_TAG=3.7
-    - DOCKER_BASE_IMAGE=zeroc/ci-base-ubuntu-16.04:${DOCKER_BASE_TAG}
-    - DOCKER_BUILD_IMAGE=zeroc/ci-build-ubuntu-16.04:${TRAVIS_JOB_NUMBER}
-    - MAKEFLAGS='-j3 V=1 OPTIMIZE=no USER_NAMESPACES=no CONFIGS="shared"'
+  - DOCKER_BASE_TAG=3.7
+  - DOCKER_BASE_IMAGE=zeroc/travis-base-ubuntu-16.04:${DOCKER_BASE_TAG}
+  - DOCKER_BUILD_IMAGE=zeroc/travis-build-ubuntu-16.04:${TRAVIS_JOB_NUMBER}
+  - MAKEFLAGS="-j3 V=1 OPTIMIZE=no USER_NAMESPACES=no CONFIGS=shared"
+  - DOCKER_RUN="docker run -t --name test ${DOCKER_BUILD_IMAGE}"
+  - ALLTESTS="python allTests.py --debug --protocol=ssl --workers=4"
 
 jobs:
   include:
     - stage: build docker image
       script:
-      - sudo pip install docker-squash
-      - scripts/generate-ci-dockerfile.sh
       - docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}"
+      - |-
+        cat << EOF > Dockerfile
+        FROM ${DOCKER_BASE_IMAGE}
+        RUN make ${MAKEFLAGS}
+        EOF
       - docker build --cache-from ${DOCKER_BASE_IMAGE} -t ${DOCKER_BUILD_IMAGE} .
       - docker push ${DOCKER_BUILD_IMAGE}
+    - stage: test docker image
+      script: $DOCKER_RUN "${ALLTESTS} --filter=cpp"
+      env: TESTING=C++
+    - script: $DOCKER_RUN "cd cpp; make ${MAKEFLAGS} CONFIGS='shared cpp11-shared'; ${ALLTESTS}"
+      env: TESTING=C++11
+    - script: $DOCKER_RUN "${ALLTESTS} --rfilter=cpp"
+      env: TESTING=Everything else
+
+after_script:
+- echo "done"
