@@ -13,7 +13,7 @@ env:
 
 jobs:
   include:
-    - stage: build docker image
+    - stage: Build Docker Image
       script:
       - docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}"
       - |-
@@ -23,7 +23,8 @@ jobs:
         EOF
       - docker build --cache-from ${DOCKER_BASE_IMAGE} -t ${DOCKER_BUILD_IMAGE} .
       - docker push ${DOCKER_BUILD_IMAGE}
-    - stage: test docker image
+
+    - stage: Test Docker Image
       script: $DOCKER_RUN "${ALLTESTS} --filter=cpp"
       env: TESTING=C++
     - script: $DOCKER_RUN "cd cpp; make ${MAKEFLAGS} CONFIGS='shared cpp11-shared'; ${ALLTESTS}"
