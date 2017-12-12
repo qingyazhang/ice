@@ -8,7 +8,7 @@ env:
   - DOCKER_BASE_IMAGE=zeroc/travis-ci-base-ubuntu-16.04:${DOCKER_BASE_TAG}
   - DOCKER_BUILD_IMAGE=zeroc/travis-ci-build-ubuntu-16.04:${TRAVIS_BUILD_NUMBER}
   - MAKEFLAGS="-j3 V=1 OPTIMIZE=no USER_NAMESPACES=no CONFIGS=shared"
-  - DOCKER_RUN="docker run -t --name test ${DOCKER_BUILD_IMAGE}"
+  - DOCKER_RUN="docker run --rm ${DOCKER_BUILD_IMAGE} /bin/bash -c"
   - ALLTESTS="python allTests.py --debug --protocol=ssl --workers=4"
 
 jobs:
