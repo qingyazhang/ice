@@ -17,10 +17,10 @@ jobs:
       script:
       - docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}"
       - |-
-        cat <<EOF > Dockerfile
-        FROM ${DOCKER_BASE_IMAGE}
-        RUN make ${MAKEFLAGS}
-      EOF
+        echo "\
+        FROM ${DOCKER_BASE_IMAGE}\
+        RUN make ${MAKEFLAGS}\
+        " > Dockerfile
       - docker build --cache-from ${DOCKER_BASE_IMAGE} -t ${DOCKER_BUILD_IMAGE} .
       - docker push ${DOCKER_BUILD_IMAGE}
 
