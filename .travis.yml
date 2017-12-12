@@ -20,7 +20,7 @@ jobs:
         cat <<EOF > Dockerfile
         FROM ${DOCKER_BASE_IMAGE}
         RUN make ${MAKEFLAGS}
-        EOF
+      EOF
       - docker build --cache-from ${DOCKER_BASE_IMAGE} -t ${DOCKER_BUILD_IMAGE} .
       - docker push ${DOCKER_BUILD_IMAGE}
 
