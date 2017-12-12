@@ -16,11 +16,9 @@ jobs:
     - stage: Build Docker Image
       script:
       - docker login --username "${DOCKER_USERNAME}" --password "${DOCKER_PASSWORD}"
-      - |-
-        echo "\
-        FROM ${DOCKER_BASE_IMAGE}\
-        RUN make ${MAKEFLAGS}\
-        " > Dockerfile
+      - |
+        echo "FROM ${DOCKER_BASE_IMAGE}" > Dockerfile
+        echo "RUN make ${MAKEFLAGS}" > Dockerfile
       - docker build --cache-from ${DOCKER_BASE_IMAGE} -t ${DOCKER_BUILD_IMAGE} .
       - docker push ${DOCKER_BUILD_IMAGE}
 
