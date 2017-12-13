@@ -1,6 +1,7 @@
 sudo: true
 language: generic
 dist: trusty
+group: travis_latest
 
 env:
   global:
@@ -9,7 +10,7 @@ env:
   - DOCKER_BUILD_IMAGE=zeroc/travis-ci-build-ubuntu-16.04:${TRAVIS_BUILD_NUMBER}
   - MAKEFLAGS="-j3 V=1 OPTIMIZE=no USER_NAMESPACES=no CONFIGS=shared"
   - DOCKER_RUN="docker run --rm ${DOCKER_BUILD_IMAGE} /bin/bash -c"
-  - ALLTESTS="python allTests.py --debug --protocol=ssl --workers=4"
+  - ALLTESTS="python allTests.py --protocol=ssl --workers=4"
 
 jobs:
   include:
@@ -27,7 +28,7 @@ jobs:
       env: TESTING=C++
     - script: $DOCKER_RUN "cd cpp; make ${MAKEFLAGS} CONFIGS='shared cpp11-shared'; ${ALLTESTS}"
       env: TESTING=C++11
-    - script: $DOCKER_RUN "${ALLTESTS} --rfilter=cpp"
+    - script: $DOCKER_RUN "${ALLTESTS} --rfilter=cpp --js-server=java"
       env: TESTING=Everything else
 
 after_script:
