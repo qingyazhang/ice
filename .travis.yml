@@ -28,8 +28,20 @@ jobs:
       env: TESTING=C++
     - script: $DOCKER_RUN "cd cpp; make ${MAKEFLAGS} CONFIGS='shared cpp11-shared'; ${ALLTESTS}"
       env: TESTING=C++11
-    - script: $DOCKER_RUN "${ALLTESTS} --rfilter=cpp --js-server=java"
-      env: TESTING=Everything else
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=chsarp"
+      env: TESTING=C#
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=java"
+      env: TESTING=Java
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=java-compat"
+      env: TESTING=Java Compat
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=js"
+      env: TESTING=JavaScript
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=php"
+      env: TESTING=PHP
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=python"
+      env: TESTING=Python
+    - script: $DOCKER_RUN "${ALLTESTS} --filter=ruby"
+      env: TESTING=Ruby
 
 after_script:
 - echo "done"
